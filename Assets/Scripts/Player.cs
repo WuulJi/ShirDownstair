@@ -22,4 +22,24 @@ public class Player : MonoBehaviour
                transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
           }
      }
+
+     private void OnCollisionEnter2D(Collision2D collision)
+     {
+          if (collision.gameObject.tag == "Normal") 
+          {
+               Debug.Log("hit Normal");
+          }
+          else if(collision.gameObject.tag =="Nails")
+          {
+               Debug.Log("hit Nails");
+          }
+     }
+
+     private void OnTriggerEnter2D(Collider2D collision)
+     {
+          if (collision.gameObject.tag == "DeathLine")
+          {
+               Debug.Log("hit Dead");
+          }
+     }
 }
