@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
      [SerializeField] float moveSpeed = 5f;
+     GameObject currentFloor;
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
@@ -28,10 +29,17 @@ public class Player : MonoBehaviour
           if (collision.gameObject.tag == "Normal") 
           {
                Debug.Log("hit Normal");
+               currentFloor = collision.gameObject;
           }
-          else if(collision.gameObject.tag =="Nails")
+          else if(collision.gameObject.tag == "Nails")
           {
                Debug.Log("hit Nails");
+               currentFloor = collision.gameObject;
+          }
+          else if(collision.gameObject.tag == "Ceiling")
+          {
+               Debug.Log("hit Ceiling");
+               currentFloor.GetComponent<BoxCollider2D>().enabled = false;
           }
      }
 
