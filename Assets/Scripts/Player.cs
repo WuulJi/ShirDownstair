@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class Player : MonoBehaviour
      GameObject currentFloor;
      [SerializeField] int hp;
      [SerializeField] GameObject hpBar;
+     [SerializeField] TextMeshProUGUI scoreText; // 使用 TextMeshPro 組件
+     int score = 0;
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
@@ -36,6 +39,7 @@ public class Player : MonoBehaviour
                     Debug.Log("hit Normal");
                     currentFloor = collision.gameObject;
                     ModifyHp(1);
+                    UpdateScore();
                }
           }
           else if(collision.gameObject.tag == "Nails")
@@ -45,6 +49,7 @@ public class Player : MonoBehaviour
                     Debug.Log("hit Nails");
                     currentFloor = collision.gameObject;
                     ModifyHp(-1);
+                    UpdateScore();
                }
           }
           else if(collision.gameObject.tag == "Ceiling")
@@ -84,5 +89,12 @@ public class Player : MonoBehaviour
                     hpBar.transform.GetChild(i).gameObject.SetActive(false);
                }
           }
+     }
+
+     public void UpdateScore()
+     {
+          score++;
+          scoreText.text = "地下 " +score+ " 層"; 
+          //用score.ToString()結果一樣，C#會自動轉字串
      }
 }
