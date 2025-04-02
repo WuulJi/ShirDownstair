@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
      [SerializeField] GameObject hpBar;
      [SerializeField] TextMeshProUGUI scoreText; // 使用 TextMeshPro 組件
      int score = 0;
+     GameObject lastFloor;
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour
           else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
           {
                transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
-          }
+          }          
      }
 
      private void OnCollisionEnter2D(Collision2D collision)
@@ -38,9 +39,22 @@ public class Player : MonoBehaviour
                if (collision.contacts[0].normal == Vector2.up)
                {
                     Debug.Log("hit Normal");
-                    currentFloor = collision.gameObject;
-                    ModifyHp(1);
-                    UpdateScore();
+
+                    if (currentFloor == null)// 如果 currentFloor 為空，表示是第一次碰到地板，初始化 currentFloor 和 lastFloor
+                    {
+                         currentFloor = collision.gameObject;
+                         lastFloor = currentFloor;
+                    }
+                    else
+                    {
+                         lastFloor = currentFloor;
+                         currentFloor = collision.gameObject;
+                         int floorsJumped = Mathf.Abs(Mathf.FloorToInt(currentFloor.transform.position.y - lastFloor.transform.position.y));
+                         Debug.Log("floorsJumped: " + floorsJumped);
+                         UpdateScore(floorsJumped);
+                    }
+
+                    ModifyHp(1);                    
                }
           }
           else if(collision.gameObject.tag == "Nails")
@@ -48,9 +62,22 @@ public class Player : MonoBehaviour
                if (collision.contacts[0].normal == Vector2.up)
                {
                     Debug.Log("hit Nails");
-                    currentFloor = collision.gameObject;
-                    ModifyHp(-1);
-                    UpdateScore();
+
+                    if (currentFloor == null) // 如果 currentFloor 為空，表示是第一次碰到地板，初始化 currentFloor 和 lastFloor
+                    {
+                         currentFloor = collision.gameObject;
+                         lastFloor = currentFloor;
+                    }
+                    else
+                    {
+                         lastFloor = currentFloor;
+                         currentFloor = collision.gameObject;
+                         int floorsJumped = Mathf.Abs(Mathf.FloorToInt(currentFloor.transform.position.y - lastFloor.transform.position.y));
+                         Debug.Log("floorsJumped: " + floorsJumped);
+                         UpdateScore(floorsJumped);
+                    }
+
+                    ModifyHp(-1);                    
                }
           }
           else if(collision.gameObject.tag == "Ceiling")
@@ -92,9 +119,9 @@ public class Player : MonoBehaviour
           }
      }
 
-     public void UpdateScore()
+     public void UpdateScore(int floorsJumped)
      {
-          score++;
+          score += floorsJumped;
           scoreText.text = "地下 " +score+ " 層"; 
           //用score.ToString()結果一樣，C#會自動轉字串
      }
