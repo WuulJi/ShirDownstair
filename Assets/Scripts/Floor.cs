@@ -14,7 +14,7 @@ public class Floor : MonoBehaviour
     void Update()
     {
         transform.Translate(0, moveSpeed * Time.deltaTime, 0);
-        if (transform.position.y > 6f)
+        if (transform.position.y > transform.parent.GetComponent<FloorManager>().GetClearline())
          {
                Destroy(gameObject);
                transform.parent.GetComponent<FloorManager>().SpawnFloor();
