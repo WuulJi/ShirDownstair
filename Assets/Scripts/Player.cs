@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
      void Start()
     {
           hp = 10;
+          score = 0;
      }
 
     // Update is called once per frame
