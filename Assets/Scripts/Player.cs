@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -28,13 +29,19 @@ public class Player : MonoBehaviour
      {
           if (collision.gameObject.tag == "Normal") 
           {
-               Debug.Log("hit Normal");
-               currentFloor = collision.gameObject;
+               if (collision.contacts[0].normal == Vector2.up)
+               {
+                    Debug.Log("hit Normal");
+                    currentFloor = collision.gameObject;
+               }
           }
           else if(collision.gameObject.tag == "Nails")
           {
-               Debug.Log("hit Nails");
-               currentFloor = collision.gameObject;
+               if (collision.contacts[0].normal == Vector2.up)
+               {
+                    Debug.Log("hit Nails");
+                    currentFloor = collision.gameObject;
+               }
           }
           else if(collision.gameObject.tag == "Ceiling")
           {
