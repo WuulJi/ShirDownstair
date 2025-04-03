@@ -11,12 +11,16 @@ public class Player : MonoBehaviour
      [SerializeField] TextMeshProUGUI scoreText; // 使用 TextMeshPro 組件
      int score = 0;
      GameObject lastFloor;
+     Animator anim;
+     SpriteRenderer sprR;
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
     {
           hp = 10;
           score = 0;
+          anim = GetComponent<Animator>();
+          sprR = GetComponent<SpriteRenderer>();
      }
 
     // Update is called once per frame
@@ -25,11 +29,19 @@ public class Player : MonoBehaviour
           if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
           {
                transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
+               sprR.flipX = true;
+               anim.SetBool("Move", true);
           }
           else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
           {
                transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
-          }          
+               sprR.flipX = false;
+               anim.SetBool("Move", true);
+          }
+          else
+          {
+               anim.SetBool("Move", false);
+          }
      }
 
      private void OnCollisionEnter2D(Collision2D collision)
@@ -77,7 +89,9 @@ public class Player : MonoBehaviour
                          UpdateScore(floorsJumped);
                     }
 
-                    ModifyHp(-1);                    
+                    ModifyHp(-1);
+                    
+                    anim.SetTrigger("Hurt");
                }
           }
           else if(collision.gameObject.tag == "Ceiling")
@@ -85,6 +99,8 @@ public class Player : MonoBehaviour
                Debug.Log("hit Ceiling");
                currentFloor.GetComponent<BoxCollider2D>().enabled = false;
                ModifyHp(-1);
+
+               anim.SetTrigger("Hurt");
           }
      }
 
