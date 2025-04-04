@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
      SpriteRenderer sprR;
      AudioSource deathSound;
      [SerializeField] GameObject replayButton;
+     int damage = -2; // 受傷時的傷害值
+     int heal = 1; // 碰到地板時的回血值
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
@@ -84,8 +86,12 @@ public class Player : MonoBehaviour
                          UpdateScore(floorsJumped);
                     }
 
-                    ModifyHp(1);
+                    ModifyHp(heal);
                     collision.gameObject.GetComponent<AudioSource>().Play();
+               }
+               else if (collision.contacts[0].normal == Vector2.left || collision.contacts[0].normal == Vector2.right)
+               {
+                    collision.gameObject.GetComponent<Collider2D>().isTrigger = true; // 讓 Normal 的碰撞器變成觸發器，取消左右地板的碰撞
                }
           }
           else if (collision.gameObject.tag == "Nails")
@@ -108,10 +114,14 @@ public class Player : MonoBehaviour
                          UpdateScore(floorsJumped);
                     }
 
-                    ModifyHp(-1);
+                    ModifyHp(damage);
 
                     anim.SetTrigger("Hurt");
                     collision.gameObject.GetComponent<AudioSource>().Play();
+               }
+               else if (collision.contacts[0].normal == Vector2.left || collision.contacts[0].normal == Vector2.right)
+               {
+                    collision.gameObject.GetComponent<Collider2D>().isTrigger = true; // 讓 Normal 的碰撞器變成觸發器，取消左右地板的碰撞
                }
           }
           else if (collision.gameObject.tag == "Ceiling")
@@ -119,7 +129,7 @@ public class Player : MonoBehaviour
                //Debug.Log("hit Ceiling");
 
                currentFloor.GetComponent<BoxCollider2D>().enabled = false;
-               ModifyHp(-1);
+               ModifyHp(damage);
 
                anim.SetTrigger("Hurt");
                collision.gameObject.GetComponent<AudioSource>().Play();
