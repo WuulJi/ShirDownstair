@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
           if (Time.timeScale != 0) // 暫停就不加速
           {
                Time.timeScale += gameAcc * Time.deltaTime; //加快遊戲速度
-               Debug.Log("Time.timeScale: " + Time.timeScale);
+               //Debug.Log("Time.timeScale: " + Time.timeScale);
           }
           
           if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
