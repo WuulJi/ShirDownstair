@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
      GameObject lastFloor;
      Animator anim;
      SpriteRenderer sprR;
+     AudioSource deathSound;
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
           score = 0;
           anim = GetComponent<Animator>();
           sprR = GetComponent<SpriteRenderer>();
+          deathSound = GetComponent<AudioSource>();
      }
 
     // Update is called once per frame
@@ -66,7 +68,8 @@ public class Player : MonoBehaviour
                          UpdateScore(floorsJumped);
                     }
 
-                    ModifyHp(1);                    
+                    ModifyHp(1);
+                    collision.gameObject.GetComponent<AudioSource>().Play();
                }
           }
           else if(collision.gameObject.tag == "Nails")
@@ -92,6 +95,7 @@ public class Player : MonoBehaviour
                     ModifyHp(-1);
                     
                     anim.SetTrigger("Hurt");
+                    collision.gameObject.GetComponent<AudioSource>().Play();
                }
           }
           else if(collision.gameObject.tag == "Ceiling")
@@ -101,6 +105,7 @@ public class Player : MonoBehaviour
                ModifyHp(-1);
 
                anim.SetTrigger("Hurt");
+               collision.gameObject.GetComponent<AudioSource>().Play();
           }
      }
 
@@ -109,13 +114,18 @@ public class Player : MonoBehaviour
           if (collision.gameObject.tag == "DeathLine")
           {
                Debug.Log("hit Dead");
+               deathSound.Play();
           }
      }
 
      void ModifyHp (int num)
      {
           hp += num;
-          if (hp < 0) hp = 0;
+          if (hp < 0) 
+          { 
+               hp = 0;
+               deathSound.Play();
+          }
           else if (hp > 10) hp = 10;
           UpdateHp();
      }
