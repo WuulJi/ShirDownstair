@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
      [SerializeField] GameObject replayButton;
      int damage = -2; // 受傷時的傷害值
      int heal = 1; // 碰到地板時的回血值
+     float gameAcc = 0.05f; // 加快遊戲速度
 
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
@@ -29,11 +30,18 @@ public class Player : MonoBehaviour
           sprR = GetComponent<SpriteRenderer>();
           deathSound = GetComponent<AudioSource>();
           replayButton.SetActive(false);
+          Time.timeScale = 1; // 確保遊戲開始時時間正常流逝
      }
 
      // Update is called once per frame
      void Update()
      {
+          if (Time.timeScale != 0) // 暫停就不加速
+          {
+               Time.timeScale += gameAcc * Time.deltaTime; //加快遊戲速度
+               Debug.Log("Time.timeScale: " + Time.timeScale);
+          }
+          
           if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
           {
                transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);

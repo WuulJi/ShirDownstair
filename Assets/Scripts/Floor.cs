@@ -18,6 +18,6 @@ public class Floor : MonoBehaviour
          {
                Destroy(gameObject);
                transform.parent.GetComponent<FloorManager>().SpawnFloor();
-         }
-    }
+         }        
+     }
 }
